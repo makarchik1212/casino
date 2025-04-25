@@ -183,7 +183,7 @@
       // Уменьшаем баланс
       updateBalance(-casePrice);
 
-      // Анимация открытия кейса
+      // Анимация прокрутки скинов
       const caseElement = document.getElementById(`case-${caseName}`);
       gsap.to(caseElement, { scale: 1.2, rotation: 360, duration: 1, ease: "bounce.out", onComplete: function() {
         // После анимации выпадения скина
@@ -191,6 +191,19 @@
         const randomItem = items[Math.floor(Math.random() * items.length)];
         showCaseResult(randomItem);
       } });
+
+      // Прокручиваем скины с анимацией
+      let skinList = document.querySelectorAll('.case-info ul li');
+      let scrollAnimation = gsap.fromTo(skinList, {
+        y: '100%', 
+        opacity: 0
+      }, {
+        y: '0%', 
+        opacity: 1,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power2.out"
+      });
     }
 
     // Показываем результат выпадения скина
@@ -254,6 +267,7 @@
   </script>
 </body>
 </html>
+
 
 
 
