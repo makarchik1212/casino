@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dropnado | CS:GO Case Casino</title>
+  <title>Case Battle</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <style>
@@ -29,6 +29,12 @@
     .case-card:hover {
       transform: scale(1.05);
     }
+    .skin-item {
+      background-color: #444;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
     #case-result {
       margin-top: 20px;
       padding: 10px;
@@ -42,37 +48,13 @@
       font-size: 20px;
       color: #f5b342;
     }
-    .skin-item {
-      background-color: #444;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .case-info {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 20px;
-      border-radius: 10px;
-      color: white;
-      width: 200px;
-      z-index: 10;
-    }
-    .case-card:hover .case-info {
-      display: block;
-    }
   </style>
 </head>
 <body class="bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
 
   <!-- Header -->
   <header class="p-6 flex justify-between items-center bg-gray-950 shadow-lg">
-    <h1 class="text-3xl font-bold text-yellow-400">🎁 Dropnado</h1>
+    <h1 class="text-3xl font-bold text-yellow-400">🎁 Case Battle</h1>
     <div>
       <span id="balance">Баланс: $100</span>
     </div>
@@ -80,52 +62,28 @@
 
   <!-- Hero Section -->
   <section class="text-center py-16">
-    <h2 class="text-5xl font-extrabold mb-4">Открывай кейсы CS:GO и выигрывай крутые скины!</h2>
-    <p class="text-lg text-gray-300 mb-6">Лучшее казино для дропа скинов — только на Dropnado!</p>
+    <h2 class="text-5xl font-extrabold mb-4">Открывай кейсы и выигрывай скины!</h2>
+    <p class="text-lg text-gray-300 mb-6">Попробуй свою удачу и получи крутые скины из популярных кейсов!</p>
   </section>
 
   <!-- Кейсы -->
   <section class="py-10 px-4">
-    <h3 class="text-3xl font-bold text-center mb-8">🔥 Популярные кейсы</h3>
+    <h3 class="text-3xl font-bold text-center mb-8">Популярные кейсы</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      <div class="case-card relative" id="case-spectrum" onclick="openCase('spectrum')">
+      <div class="case-card" id="case-spectrum" onclick="openCase('spectrum')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/spectrum_case.png" alt="Spectrum Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Spectrum Case</h4>
         <button class="case-btn">Открыть за $10</button>
-        <div class="case-info">
-          <h4 class="font-bold">Возможные скины:</h4>
-          <ul>
-            <li>AK-47 | Redline</li>
-            <li>AWP | Asiimov</li>
-            <li>M4A4 | Desolate Space</li>
-          </ul>
-        </div>
       </div>
-      <div class="case-card relative" id="case-clutch" onclick="openCase('clutch')">
+      <div class="case-card" id="case-clutch" onclick="openCase('clutch')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/clutch_case.png" alt="Clutch Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Clutch Case</h4>
         <button class="case-btn">Открыть за $20</button>
-        <div class="case-info">
-          <h4 class="font-bold">Возможные скины:</h4>
-          <ul>
-            <li>USP-S | Kill Confirmed</li>
-            <li>AK-47 | Vulcan</li>
-            <li>M4A1-S | Golden Coil</li>
-          </ul>
-        </div>
       </div>
-      <div class="case-card relative" id="case-glove" onclick="openCase('glove')">
+      <div class="case-card" id="case-glove" onclick="openCase('glove')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/glove_case.png" alt="Glove Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Glove Case</h4>
         <button class="case-btn">Открыть за $50</button>
-        <div class="case-info">
-          <h4 class="font-bold">Возможные скины:</h4>
-          <ul>
-            <li>Glock-18 | Water Elemental</li>
-            <li>AK-47 | Fire Serpent</li>
-            <li>M9 Bayonet | Crimson Web</li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
@@ -148,7 +106,7 @@
 
   <!-- Footer -->
   <footer class="py-6 text-center text-gray-400">
-    © 2025 Dropnado — Неофициальный сайт CS:GO. Все права на скины принадлежат Valve.
+    © 2025 Case Battle — Неофициальный сайт CS:GO. Все права на скины принадлежат Valve.
   </footer>
 
   <script>
@@ -183,7 +141,7 @@
       // Уменьшаем баланс
       updateBalance(-casePrice);
 
-      // Анимация прокрутки скинов
+      // Плавная анимация открытия кейса (с изменением масштаба)
       const caseElement = document.getElementById(`case-${caseName}`);
       gsap.to(caseElement, { scale: 1.2, rotation: 360, duration: 1, ease: "bounce.out", onComplete: function() {
         // После анимации выпадения скина
@@ -191,19 +149,6 @@
         const randomItem = items[Math.floor(Math.random() * items.length)];
         showCaseResult(randomItem);
       } });
-
-      // Прокручиваем скины с анимацией
-      let skinList = document.querySelectorAll('.case-info ul li');
-      let scrollAnimation = gsap.fromTo(skinList, {
-        y: '100%', 
-        opacity: 0
-      }, {
-        y: '0%', 
-        opacity: 1,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power2.out"
-      });
     }
 
     // Показываем результат выпадения скина
@@ -267,6 +212,7 @@
   </script>
 </body>
 </html>
+
 
 
 
