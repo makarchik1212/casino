@@ -50,6 +50,22 @@
       display: flex;
       justify-content: space-between;
     }
+    .case-info {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+      width: 200px;
+      z-index: 10;
+    }
+    .case-card:hover .case-info {
+      display: block;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
@@ -72,20 +88,44 @@
   <section class="py-10 px-4">
     <h3 class="text-3xl font-bold text-center mb-8">🔥 Популярные кейсы</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      <div class="case-card" id="case-spectrum" onclick="openCase('spectrum')">
+      <div class="case-card relative" id="case-spectrum" onclick="openCase('spectrum')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/spectrum_case.png" alt="Spectrum Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Spectrum Case</h4>
         <button class="case-btn">Открыть за $10</button>
+        <div class="case-info">
+          <h4 class="font-bold">Возможные скины:</h4>
+          <ul>
+            <li>AK-47 | Redline</li>
+            <li>AWP | Asiimov</li>
+            <li>M4A4 | Desolate Space</li>
+          </ul>
+        </div>
       </div>
-      <div class="case-card" id="case-clutch" onclick="openCase('clutch')">
+      <div class="case-card relative" id="case-clutch" onclick="openCase('clutch')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/clutch_case.png" alt="Clutch Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Clutch Case</h4>
         <button class="case-btn">Открыть за $20</button>
+        <div class="case-info">
+          <h4 class="font-bold">Возможные скины:</h4>
+          <ul>
+            <li>USP-S | Kill Confirmed</li>
+            <li>AK-47 | Vulcan</li>
+            <li>M4A1-S | Golden Coil</li>
+          </ul>
+        </div>
       </div>
-      <div class="case-card" id="case-glove" onclick="openCase('glove')">
+      <div class="case-card relative" id="case-glove" onclick="openCase('glove')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/glove_case.png" alt="Glove Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Glove Case</h4>
         <button class="case-btn">Открыть за $50</button>
+        <div class="case-info">
+          <h4 class="font-bold">Возможные скины:</h4>
+          <ul>
+            <li>Glock-18 | Water Elemental</li>
+            <li>AK-47 | Fire Serpent</li>
+            <li>M9 Bayonet | Crimson Web</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
