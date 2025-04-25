@@ -38,6 +38,18 @@
       text-align: center;
       display: none;
     }
+    #balance {
+      font-size: 20px;
+      color: #f5b342;
+    }
+    .skin-item {
+      background-color: #444;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
@@ -45,10 +57,9 @@
   <!-- Header -->
   <header class="p-6 flex justify-between items-center bg-gray-950 shadow-lg">
     <h1 class="text-3xl font-bold text-yellow-400">🎁 Dropnado</h1>
-    <nav class="space-x-4">
-      <button class="px-4 py-2 bg-yellow-500 rounded-xl hover:bg-yellow-600">Войти</button>
-      <button class="px-4 py-2 bg-white text-gray-900 rounded-xl hover:bg-gray-200">Регистрация</button>
-    </nav>
+    <div>
+      <span id="balance">Баланс: $100</span>
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -61,20 +72,20 @@
   <section class="py-10 px-4">
     <h3 class="text-3xl font-bold text-center mb-8">🔥 Популярные кейсы</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      <div class="case-card" onclick="openCase('spectrum')">
+      <div class="case-card" id="case-spectrum" onclick="openCase('spectrum')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/spectrum_case.png" alt="Spectrum Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Spectrum Case</h4>
-        <button class="case-btn">Открыть</button>
+        <button class="case-btn">Открыть за $10</button>
       </div>
-      <div class="case-card" onclick="openCase('clutch')">
+      <div class="case-card" id="case-clutch" onclick="openCase('clutch')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/clutch_case.png" alt="Clutch Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Clutch Case</h4>
-        <button class="case-btn">Открыть</button>
+        <button class="case-btn">Открыть за $20</button>
       </div>
-      <div class="case-card" onclick="openCase('glove')">
+      <div class="case-card" id="case-glove" onclick="openCase('glove')">
         <img src="https://cdn.cloudflare.steamstatic.com/apps/csgo/images/cases/glove_case.png" alt="Glove Case" class="w-32 h-32 mx-auto mb-4">
         <h4 class="text-xl font-bold">Glove Case</h4>
-        <button class="case-btn">Открыть</button>
+        <button class="case-btn">Открыть за $50</button>
       </div>
     </div>
   </section>
@@ -83,7 +94,17 @@
   <div id="case-result">
     <h3 class="text-2xl font-bold">Поздравляем! Ваш скин:</h3>
     <p id="skin-name" class="text-lg mt-2">...</p>
+    <button onclick="sellSkin()" class="case-btn mt-4">Продать скин</button>
+    <button onclick="upgradeSkin()" class="case-btn mt-4">Апгрейд скина</button>
   </div>
+
+  <!-- Список скинов -->
+  <section id="skins-list" class="py-10">
+    <h3 class="text-2xl font-bold text-center mb-8">Ваши скины</h3>
+    <div id="skins-container" class="max-w-3xl mx-auto">
+      <!-- Скины будут добавляться сюда -->
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="py-6 text-center text-gray-400">
@@ -91,29 +112,108 @@
   </footer>
 
   <script>
+    let balance = 100; // Начальный баланс
+    let skins = []; // Массив скинов игрока
+
+    // Скины для каждого кейса
+    const caseData = {
+      spectrum: ['AK-47 | Redline', 'AWP | Asiimov', 'M4A4 | Desolate Space'],
+      clutch: ['USP-S | Kill Confirmed', 'AK-47 | Vulcan', 'M4A1-S | Golden Coil'],
+      glove: ['Glock-18 | Water Elemental', 'AK-47 | Fire Serpent', 'M9 Bayonet | Crimson Web']
+    };
+
+    // Обновляем баланс
+    function updateBalance(amount) {
+      balance += amount;
+      document.getElementById("balance").innerText = `Баланс: $${balance}`;
+    }
+
+    // Открытие кейса с анимацией
     function openCase(caseName) {
-      const caseData = {
-        spectrum: ['AK-47 | Redline', 'AWP | Asiimov', 'M4A4 | Desolate Space'],
-        clutch: ['USP-S | Kill Confirmed', 'AK-47 | Vulcan', 'M4A1-S | Golden Coil'],
-        glove: ['Glock-18 | Water Elemental', 'AK-47 | Fire Serpent', 'M9 Bayonet | Crimson Web']
-      };
+      let casePrice = 0;
+      if (caseName === 'spectrum') casePrice = 10;
+      if (caseName === 'clutch') casePrice = 20;
+      if (caseName === 'glove') casePrice = 50;
 
-      // Выбираем случайный скин
-      const items = caseData[caseName];
-      const randomItem = items[Math.floor(Math.random() * items.length)];
+      if (balance < casePrice) {
+        alert("У вас недостаточно средств!");
+        return;
+      }
 
-      // Показываем анимацию открытия кейса
-      gsap.fromTo(".case-btn", { scale: 1 }, { scale: 1.5, duration: 0.5, yoyo: true, repeat: 1 });
+      // Уменьшаем баланс
+      updateBalance(-casePrice);
 
-      // Показываем результат
+      // Анимация открытия кейса
+      const caseElement = document.getElementById(`case-${caseName}`);
+      gsap.to(caseElement, { scale: 1.2, rotation: 360, duration: 1, ease: "bounce.out", onComplete: function() {
+        // После анимации выпадения скина
+        const items = caseData[caseName];
+        const randomItem = items[Math.floor(Math.random() * items.length)];
+        showCaseResult(randomItem);
+      } });
+    }
+
+    // Показываем результат выпадения скина
+    function showCaseResult(randomItem) {
+      // Показываем результат выпадения скина
       document.getElementById("case-result").style.display = "block";
       document.getElementById("skin-name").innerText = randomItem;
 
-      // Анимация появления результата
-      gsap.fromTo("#case-result", { opacity: 0 }, { opacity: 1, duration: 1 });
+      // Добавляем скин в список
+      skins.push(randomItem);
+      displaySkins();
+    }
+
+    // Продажа скина
+    function sellSkin() {
+      if (skins.length === 0) {
+        alert("У вас нет скинов для продажи.");
+        return;
+      }
+
+      const soldSkin = skins.pop();
+      alert(`Вы продали: ${soldSkin}`);
+      updateBalance(5); // Примерная цена продажи
+      displaySkins();
+    }
+
+    // Апгрейд скина
+    function upgradeSkin() {
+      if (skins.length === 0) {
+        alert("У вас нет скинов для апгрейда.");
+        return;
+      }
+
+      const upgradeCost = 30; // Стоимость апгрейда
+      if (balance < upgradeCost) {
+        alert("Недостаточно средств для апгрейда.");
+        return;
+      }
+
+      updateBalance(-upgradeCost);
+      alert("Скин успешно улучшен!");
+
+      // Псевдо апгрейд: заменим старый скин на новый
+      const upgradedSkin = "AK-47 | Fire Serpent"; // Пример улучшенного скина
+      skins[0] = upgradedSkin; // Заменим первый скин
+      displaySkins();
+    }
+
+    // Отображение скинов в интерфейсе
+    function displaySkins() {
+      const skinsContainer = document.getElementById("skins-container");
+      skinsContainer.innerHTML = ''; // Очищаем список
+
+      skins.forEach(skin => {
+        const skinElement = document.createElement("div");
+        skinElement.classList.add("skin-item");
+        skinElement.innerHTML = `${skin} <button onclick="sellSkin()" class="case-btn">Продать</button>`;
+        skinsContainer.appendChild(skinElement);
+      });
     }
   </script>
 </body>
 </html>
+
 
 
