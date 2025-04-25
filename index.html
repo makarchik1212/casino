@@ -6,7 +6,6 @@
   <title>Dropnado | CS:GO Case Casino</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <!-- Для анимации скинов -->
   <style>
     .case-btn {
       background-color: #f5b342;
@@ -30,6 +29,15 @@
     .case-card:hover {
       transform: scale(1.05);
     }
+    #case-result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #333;
+      border-radius: 10px;
+      color: white;
+      text-align: center;
+      display: none;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
@@ -47,7 +55,6 @@
   <section class="text-center py-16">
     <h2 class="text-5xl font-extrabold mb-4">Открывай кейсы CS:GO и выигрывай крутые скины!</h2>
     <p class="text-lg text-gray-300 mb-6">Лучшее казино для дропа скинов — только на Dropnado!</p>
-    <button class="px-8 py-4 bg-yellow-500 text-xl rounded-2xl hover:bg-yellow-600 transition">🎲 Открыть кейс</button>
   </section>
 
   <!-- Кейсы -->
@@ -72,6 +79,12 @@
     </div>
   </section>
 
+  <!-- Результат выпадения скина -->
+  <div id="case-result">
+    <h3 class="text-2xl font-bold">Поздравляем! Ваш скин:</h3>
+    <p id="skin-name" class="text-lg mt-2">...</p>
+  </div>
+
   <!-- Footer -->
   <footer class="py-6 text-center text-gray-400">
     © 2025 Dropnado — Неофициальный сайт CS:GO. Все права на скины принадлежат Valve.
@@ -89,12 +102,17 @@
       const items = caseData[caseName];
       const randomItem = items[Math.floor(Math.random() * items.length)];
 
-      // Показываем выпадение скина
-      alert(`Вы выпали: ${randomItem}`);
-
-      // Можно добавить анимацию выпадения (например, с помощью GSAP)
+      // Показываем анимацию открытия кейса
       gsap.fromTo(".case-btn", { scale: 1 }, { scale: 1.5, duration: 0.5, yoyo: true, repeat: 1 });
+
+      // Показываем результат
+      document.getElementById("case-result").style.display = "block";
+      document.getElementById("skin-name").innerText = randomItem;
+
+      // Анимация появления результата
+      gsap.fromTo("#case-result", { opacity: 0 }, { opacity: 1, duration: 1 });
     }
   </script>
 </body>
 </html>
+
