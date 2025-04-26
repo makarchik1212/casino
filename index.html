@@ -1,58 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Case Opening</title>
+  <meta charset="UTF-8">
+  <title>🎰 Казино Кейсы</title>
   <style>
     body {
-      background: #1a1a1a;
-      color: white;
-      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      margin: 0;
+      overflow: hidden;
     }
+
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px gold;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+
+    .case-container {
+      width: 90%;
+      max-width: 600px;
+      overflow: hidden;
+      border: 4px solid gold;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
     }
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
+
+    .roller {
+      display: flex;
+      transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    .result {
-      margin-top: 30px;
-      font-size: 1.5rem;
+
+    .item {
+      flex: 0 0 100px;
+      margin: 10px;
+      text-align: center;
+      border-radius: 10px;
+      padding: 10px;
+      background: #1a1a1a;
+      border: 2px solid #333;
       font-weight: bold;
+      color: white;
+    }
+
+    .item.common { border-color: gray; }
+    .item.rare { border-color: skyblue; }
+    .item.epic { border-color: violet; }
+    .item.legendary { border-color: gold; }
+
+    .center-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      background: red;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background: gold;
+      border: none;
+      color: #111;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      cursor: pointer;
       transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ffd700;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px black;
     }
   </style>
 </head>
 <body>
-  <h1>🎁 Открытие кейса</h1>
+
+  <h1>🎁 Казино: Открой свой кейс!</h1>
+
+  <div class="case-container">
+    <div class="center-line"></div>
+    <div class="roller" id="roller">
+      <!-- Items will be inserted here dynamically -->
+    </div>
+  </div>
+
   <button id="openBtn">Открыть кейс</button>
   <div class="result" id="result"></div>
 
   <script>
     const items = [
-      { name: 'Обычный предмет', chance: 60, color: 'gray' },
-      { name: 'Редкий предмет', chance: 25, color: 'skyblue' },
-      { name: 'Эпический предмет', chance: 10, color: 'violet' },
-      { name: 'Легендарный предмет', chance: 5, color: 'gold' }
+      { name: '💵 10 монет', class: 'common', chance: 60 },
+      { name: '💎 50 кристаллов', class: 'rare', chance: 25 },
+      { name: '🎲 VIP карта', class: 'epic', chance: 10 },
+      { name: '👑 Золотой джекпот', class: 'legendary', chance: 5 }
     ];
+
+    const roller = document.getElementById('roller');
+    const btn = document.getElementById('openBtn');
+    const resultDiv = document.getElementById('result');
 
     function getRandomItem() {
       const rand = Math.random() * 100;
@@ -63,23 +125,44 @@
       }
     }
 
-    const btn = document.getElementById('openBtn');
-    const resultDiv = document.getElementById('result');
+    function fillRoller(targetItem) {
+      roller.innerHTML = '';
+      const fullList = [];
+
+      for (let i = 0; i < 20; i++) {
+        const random = items[Math.floor(Math.random() * items.length)];
+        fullList.push(random);
+      }
+
+      fullList.push(targetItem); // финальный предмет
+
+      fullList.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `item ${item.class}`;
+        div.innerText = item.name;
+        roller.appendChild(div);
+      });
+
+      return fullList.length;
+    }
 
     btn.addEventListener('click', () => {
       btn.disabled = true;
-      resultDiv.textContent = 'Открывается...';
-      resultDiv.style.color = 'white';
+      resultDiv.textContent = 'Кейс открывается...';
+
+      const winItem = getRandomItem();
+      const itemCount = fillRoller(winItem);
+
+      const scrollDistance = (itemCount - 6) * 120; // смещаем так, чтобы нужный был в центре
+      roller.style.transform = `translateX(-${scrollDistance}px)`;
 
       setTimeout(() => {
-        const item = getRandomItem();
-        resultDiv.textContent = `Вам выпал: ${item.name}`;
-        resultDiv.style.color = item.color;
+        resultDiv.innerHTML = `🎉 Вам выпало: <span style="color: ${winItem.class === 'legendary' ? 'gold' : winItem.class === 'epic' ? 'violet' : winItem.class === 'rare' ? 'skyblue' : 'gray'}">${winItem.name}</span>`;
         btn.disabled = false;
-      }, 2000);
+      }, 3200);
     });
   </script>
+
 </body>
 </html>
-
 
