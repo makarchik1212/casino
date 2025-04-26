@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropnado</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Case Opening</title>
+  <style>
+    body {
+      background: #1a1a1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+  </style>
 </head>
 <body>
+  <h1>🎁 Открытие кейса</h1>
+  <button id="openBtn">Открыть кейс</button>
+  <div class="result" id="result"></div>
 
-    <!-- Header -->
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Dropnado Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Кейсы</a></li>
-                <li><a href="#">Апгрейды</a></li>
-                <li><a href="#">Магазин</a></li>
-            </ul>
-        </nav>
-    </header>
+  <script>
+    const items = [
+      { name: 'Обычный предмет', chance: 60, color: 'gray' },
+      { name: 'Редкий предмет', chance: 25, color: 'skyblue' },
+      { name: 'Эпический предмет', chance: 10, color: 'violet' },
+      { name: 'Легендарный предмет', chance: 5, color: 'gold' }
+    ];
 
-    <!-- Main Section -->
-    <main>
-        <section class="intro">
-            <h1>Добро пожаловать в Dropnado!</h1>
-            <p>Откройте кейсы и выиграйте уникальные предметы!</p>
-            <button>Открыть кейс</button>
-        </section>
+    function getRandomItem() {
+      const rand = Math.random() * 100;
+      let sum = 0;
+      for (let item of items) {
+        sum += item.chance;
+        if (rand <= sum) return item;
+      }
+    }
 
-        <!-- Case Selection -->
-        <section class="cases">
-            <h2>Выберите свой кейс</h2>
-            <div class="case-container">
-                <div class="case">
-                    <img src="case1.jpg" alt="Case 1">
-                    <h3>Кейс 1</h3>
-                    <p>Цена: 1000</p>
-                    <button>Открыть</button>
-                </div>
-                <div class="case">
-                    <img src="case2.jpg" alt="Case 2">
-                    <h3>Кейс 2</h3>
-                    <p>Цена: 1500</p>
-                    <button>Открыть</button>
-                </div>
-                <!-- Добавь другие кейсы по аналогии -->
-            </div>
-        </section>
+    const btn = document.getElementById('openBtn');
+    const resultDiv = document.getElementById('result');
 
-        <!-- Upgrade Section -->
-        <section class="upgrade">
-            <h2>Апгрейд предмета</h2>
-            <p>Улучшите ваш предмет с шансом на успех!</p>
-            <button>Апгрейд</button>
-        </section>
-    </main>
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      resultDiv.textContent = 'Открывается...';
+      resultDiv.style.color = 'white';
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Dropnado. Все права защищены.</p>
-    </footer>
-
+      setTimeout(() => {
+        const item = getRandomItem();
+        resultDiv.textContent = `Вам выпал: ${item.name}`;
+        resultDiv.style.color = item.color;
+        btn.disabled = false;
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
-
-
 
 
