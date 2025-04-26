@@ -1,293 +1,313 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dropnado — Открытие кейсов</title>
+  <meta charset="UTF-8">
+  <title>Dropnado | Кейс-казино</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0f1115;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #111;
       color: #fff;
     }
-    .header {
-      background: #1a1d23;
-      padding: 20px 40px;
+
+    header {
+      background: #1c1f26;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
-    .logo {
-      font-size: 28px;
+
+    header h1 {
       color: #00ffff;
-      font-weight: bold;
+      font-size: 28px;
+      margin: 0;
     }
+
     .balance {
       font-size: 18px;
-      color: #00ff90;
     }
-    .main {
+
+    main {
+      padding: 20px;
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      padding: 30px;
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
-    .cases h2,
-    .inventory h2 {
-      margin-bottom: 15px;
-      color: #00ffff;
-    }
-    .case-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .case {
-      background: #1c1f25;
-      border: 2px solid #00ffff55;
-      border-radius: 10px;
-      padding: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
-    }
-    .case:hover {
-      background: #00ffff11;
-      transform: scale(1.02);
-    }
-    .case img {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    .opening {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .roller {
-      width: 100%;
-      height: 120px;
-      background: #14161c;
-      border: 3px solid #00ffff55;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .strip {
-      display: flex;
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      animation: spin 4s ease-out forwards;
-    }
-    .item {
-      width: 100px;
-      height: 100%;
-      margin: 0 5px;
+
+    section {
       background: #1a1d23;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #00ffff55;
-      border-radius: 6px;
+      padding: 20px;
+      border-radius: 12px;
     }
-    #open-btn {
-      padding: 12px 25px;
-      font-size: 16px;
-      background-color: #00ffff;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .case-list button {
+      width: 100%;
+      padding: 10px;
+      background: #00ffff;
       color: #000;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    #open-btn:disabled {
-      background-color: #444;
-      color: #999;
-      cursor: not-allowed;
-    }
-    #open-btn:hover:enabled {
-      background-color: #00dddd;
-    }
-    .inventory ul {
-      list-style: none;
-    }
-    .inventory li {
-      padding: 10px;
       margin-bottom: 10px;
-      background: #1c1f25;
-      border-left: 4px solid #00ff90;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      cursor: pointer;
+      font-weight: bold;
     }
-    .inventory button {
-      padding: 5px 10px;
-      background: #ff0044;
+
+    .inventory-item {
+      background: #252830;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .contracts {
+      grid-column: span 3;
+      margin-top: 20px;
+    }
+
+    #contract-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .contract-item {
+      padding: 10px;
+      background: #252830;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      border: 2px solid transparent;
+    }
+
+    .contract-item.selected {
+      border-color: #00ffff;
+    }
+
+    #make-contract {
+      padding: 10px 20px;
+      background: #00ffff;
       border: none;
-      color: white;
-      border-radius: 4px;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
       cursor: pointer;
     }
-    .inventory button:hover {
-      background: #dd0033;
+
+    .upgrader {
+      grid-column: span 3;
+      margin-top: 20px;
+      background: #20242d;
     }
-    @keyframes spin {
-      0% { left: 0; }
-      100% { left: -1500px; }
+
+    .upgrader input {
+      padding: 10px;
+      margin-right: 10px;
+    }
+
+    .upgrader button {
+      padding: 10px 20px;
+      background: #00ffff;
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .promo {
+      grid-column: span 3;
+      background: #191c22;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .promo input {
+      padding: 10px;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
-
-  <header class="header">
-    <div class="logo">🎯 Dropnado</div>
-    <div class="balance">Баланс: <span id="balance">$1000</span></div>
+  <header>
+    <h1>Dropnado</h1>
+    <div class="balance">Баланс: <span id="balance">1000</span>$</div>
   </header>
 
   <main class="main">
-
-    <section class="cases">
-      <h2>Выберите кейс</h2>
-      <div class="case-list">
-        <div class="case" data-case="knife">
-          <img src="https://cdn.cloudflare.steamstatic.com/apps/730/icons/econ/stickers/community04/eggnog.23cd9b2fc9e0cf5f24d782e8fc6fd5f74c43e10d.png" alt="Knife Case">
-          <p>Knife Case<br>$300</p>
-        </div>
-        <div class="case" data-case="covert">
-          <img src="https://wiki.cs.money/images/cases/spectrum2_case.png" alt="Covert Case">
-          <p>Covert Case<br>$50</p>
-        </div>
-        <div class="case" data-case="prisma">
-          <img src="https://wiki.cs.money/images/cases/prisma_case.png" alt="Prisma Case">
-          <p>Prisma Case<br>$20</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="opening">
-      <div class="roller" id="roller">
-        <!-- Прокрутка -->
-      </div>
-      <button id="open-btn" disabled>Открыть кейс</button>
+    <section class="case-list">
+      <h2>Кейсы</h2>
+      <button onclick="openCase('Desert Case', 100)">Desert Case – $100</button>
+      <button onclick="openCase('Night Storm', 200)">Night Storm – $200</button>
+      <button onclick="openCase('Ultra Rare', 500)">Ultra Rare – $500</button>
     </section>
 
     <section class="inventory">
       <h2>Инвентарь</h2>
-      <ul id="inventory-list">
-        <!-- Инвентарь -->
-      </ul>
+      <ul id="inventory-list"></ul>
     </section>
 
+    <section class="contracts">
+      <h2>Контракты</h2>
+      <p>Выберите 3–10 предметов для обмена</p>
+      <ul id="contract-list"></ul>
+      <button id="make-contract" disabled>Создать контракт</button>
+    </section>
+
+    <section class="upgrader">
+      <h2>Апгрейд</h2>
+      <input type="number" id="upgrade-id" placeholder="ID предмета из инвентаря">
+      <input type="number" id="target-price" placeholder="Цена цели ($)">
+      <button onclick="tryUpgrade()">Апгрейд</button>
+    </section>
+
+    <section class="promo">
+      <h2>Промокод</h2>
+      <input type="text" id="promo-code" placeholder="Введите промокод">
+      <button onclick="redeemPromo()">Активировать</button>
+    </section>
   </main>
 
   <script>
-    const cases = {
-      knife: {
-        price: 300,
-        items: ["★ Karambit | Fade", "★ Bayonet | Slaughter", "★ M9 Bayonet | Tiger Tooth"]
-      },
-      covert: {
-        price: 50,
-        items: ["AK-47 | Fire Serpent", "AWP | Asiimov", "Desert Eagle | Blaze"]
-      },
-      prisma: {
-        price: 20,
-        items: ["MAC-10 | Neon Rider", "P250 | See Ya Later", "MP9 | Starlight Protector"]
-      }
-    };
-
-    let selectedCase = null;
     let balance = 1000;
     let inventory = [];
+    let usedPromo = false;
 
-    document.querySelectorAll('.case').forEach(caseEl => {
-      caseEl.addEventListener('click', () => {
-        selectedCase = caseEl.dataset.case;
-        document.getElementById('open-btn').disabled = false;
-      });
-    });
-
-    document.getElementById('open-btn').addEventListener('click', () => {
-      if (!selectedCase) return;
-
-      const caseData = cases[selectedCase];
-      if (balance < caseData.price) {
-        alert("Недостаточно средств!");
-        return;
-      }
-
-      balance -= caseData.price;
-      updateBalance();
-
-      const roller = document.getElementById('roller');
-      roller.innerHTML = '';
-
-      const strip = document.createElement('div');
-      strip.className = 'strip';
-
-      const pool = [];
-      for (let i = 0; i < 50; i++) {
-        const item = getRandomItem(caseData.items);
-        pool.push(item);
-      }
-
-      pool.forEach(name => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.textContent = name;
-        strip.appendChild(div);
-      });
-
-      roller.appendChild(strip);
-
-      strip.style.left = '0px';
-      strip.style.animation = 'spin 4s ease-out forwards';
-
-      setTimeout(() => {
-        const wonItem = pool[25]; // центральный
-        alert(`Выпало: ${wonItem}`);
-        inventory.push({ name: wonItem, price: getRandomPrice(caseData.price) });
-        updateInventory();
-      }, 4000);
-    });
+    const skins = [
+      { name: "AK-47 | Redline", price: 120 },
+      { name: "M4A4 | Howl", price: 300 },
+      { name: "AWP | Asiimov", price: 200 },
+      { name: "Glock-18 | Fade", price: 180 },
+      { name: "Karambit | Doppler", price: 600 },
+      { name: "USP-S | Kill Confirmed", price: 150 },
+      { name: "Desert Eagle | Blaze", price: 250 }
+    ];
 
     function updateBalance() {
-      document.getElementById('balance').textContent = `$${balance}`;
+      document.getElementById("balance").textContent = balance;
     }
 
     function updateInventory() {
-      const invList = document.getElementById('inventory-list');
-      invList.innerHTML = '';
-
+      const list = document.getElementById("inventory-list");
+      list.innerHTML = '';
       inventory.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `${item.name} — <b>$${item.price}</b>
-            <button onclick="sellItem(${index})">Продать</button>`;
-        invList.appendChild(li);
+        const el = document.createElement('li');
+        el.className = 'inventory-item';
+        el.textContent = `#${index} - ${item.name} – $${item.price}`;
+        list.appendChild(el);
       });
     }
 
-    function sellItem(index) {
-      balance += inventory[index].price;
-      inventory.splice(index, 1);
+    function getRandomSkin() {
+      return skins[Math.floor(Math.random() * skins.length)];
+    }
+
+    function openCase(caseName, casePrice) {
+      if (balance < casePrice) {
+        alert("Недостаточно средств!");
+        return;
+      }
+      balance -= casePrice;
+      const drop = getRandomSkin();
+      inventory.push(drop);
+      alert(`Открыл ${caseName} и получил: ${drop.name} – $${drop.price}`);
       updateBalance();
       updateInventory();
+      updateContractList();
     }
 
-    function getRandomItem(items) {
-      return items[Math.floor(Math.random() * items.length)];
+    // Контракты
+    const contractList = document.getElementById('contract-list');
+    const makeContractBtn = document.getElementById('make-contract');
+    let selectedForContract = [];
+
+    function updateContractList() {
+      contractList.innerHTML = '';
+      inventory.forEach((item, index) => {
+        const el = document.createElement('div');
+        el.className = 'contract-item';
+        el.textContent = `${item.name} ($${item.price})`;
+        el.onclick = () => toggleContractItem(index, el);
+        if (selectedForContract.includes(index)) el.classList.add('selected');
+        contractList.appendChild(el);
+      });
+      makeContractBtn.disabled = selectedForContract.length < 3 || selectedForContract.length > 10;
     }
 
-    function getRandomPrice(base) {
-      return Math.floor(base * (0.8 + Math.random() * 1.2));
+    function toggleContractItem(index, el) {
+      if (selectedForContract.includes(index)) {
+        selectedForContract = selectedForContract.filter(i => i !== index);
+        el.classList.remove('selected');
+      } else {
+        selectedForContract.push(index);
+        el.classList.add('selected');
+      }
+      makeContractBtn.disabled = selectedForContract.length < 3 || selectedForContract.length > 10;
     }
+
+    makeContractBtn.addEventListener('click', () => {
+      const selectedItems = selectedForContract.map(i => inventory[i]);
+      const totalValue = selectedItems.reduce((sum, item) => sum + item.price, 0);
+      const newItemPrice = Math.floor(totalValue * (0.8 + Math.random() * 0.4));
+      const newItemName = "Контрактный дроп $" + newItemPrice;
+
+      inventory = inventory.filter((_, idx) => !selectedForContract.includes(idx));
+      inventory.push({ name: newItemName, price: newItemPrice });
+
+      selectedForContract = [];
+      updateBalance();
+      updateInventory();
+      updateContractList();
+
+      alert(`Ты получил: ${newItemName}`);
+    });
+
+    // Апгрейд
+    function tryUpgrade() {
+      const id = parseInt(document.getElementById('upgrade-id').value);
+      const target = parseInt(document.getElementById('target-price').value);
+      if (isNaN(id) || isNaN(target) || !inventory[id]) return alert('Неверный ввод.');
+
+      const current = inventory[id];
+      const chance = Math.min(100, Math.floor((current.price / target) * 100));
+      const success = Math.random() * 100 <= chance;
+
+      if (success) {
+        inventory[id] = { name: `Апгрейд $${target}`, price: target };
+        alert(`Успешный апгрейд до $${target} (${chance}%)!`);
+      } else {
+        inventory.splice(id, 1);
+        alert(`Провал. Ты потерял ${current.name} (${chance}%)`);
+      }
+
+      updateInventory();
+      updateContractList();
+    }
+
+    // Промокод
+    function redeemPromo() {
+      if (usedPromo) return alert("Промокод уже активирован!");
+      const code = document.getElementById('promo-code').value.trim().toLowerCase();
+      if (code === "dropnado") {
+        balance += 500;
+        usedPromo = true;
+        alert("Промокод активирован! +$500 на баланс");
+        updateBalance();
+      } else {
+        alert("Неверный промокод!");
+      }
+    }
+
+    updateBalance();
+    updateInventory();
+    updateContractList();
   </script>
 </body>
 </html>
