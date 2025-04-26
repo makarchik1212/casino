@@ -7,131 +7,148 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #111;
+      background: url('https://cdn.cloudflare.steamstatic.com/apps/csgo/images/dust2_overview.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #fff;
     }
 
     header {
-      background: #1c1f26;
+      background: rgba(0, 0, 0, 0.85);
       padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 2px solid #00ffff;
     }
 
     header h1 {
       color: #00ffff;
-      font-size: 28px;
+      font-size: 32px;
       margin: 0;
     }
 
     .balance {
-      font-size: 18px;
+      font-size: 20px;
+      color: #ffd700;
     }
 
     main {
       padding: 20px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
+      background: rgba(0,0,0,0.7);
     }
 
     section {
-      background: #1a1d23;
+      background: rgba(20, 20, 20, 0.85);
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0,255,255,0.2);
     }
 
     h2 {
       margin-top: 0;
+      border-bottom: 1px solid #00ffff;
+      padding-bottom: 5px;
     }
 
     .case-list button {
       width: 100%;
-      padding: 10px;
-      background: #00ffff;
+      padding: 12px;
+      background: linear-gradient(45deg, #00ffff, #007fff);
       color: #000;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 10px;
       cursor: pointer;
       font-weight: bold;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .case-list button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00ffffaa;
     }
 
     .inventory-item {
-      background: #252830;
+      background: #1e1e1e;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 8px;
-    }
-
-    .contracts {
-      grid-column: span 3;
-      margin-top: 20px;
-    }
-
-    #contract-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 20px 0;
+      border-left: 4px solid #ffd700;
     }
 
     .contract-item {
       padding: 10px;
-      background: #252830;
-      border-radius: 6px;
+      background: #2a2a2a;
+      border-radius: 8px;
       cursor: pointer;
       user-select: none;
       border: 2px solid transparent;
+      transition: border-color 0.2s ease;
     }
 
     .contract-item.selected {
       border-color: #00ffff;
     }
 
-    #make-contract {
-      padding: 10px 20px;
+    #make-contract, .upgrader button, .promo button {
+      padding: 12px 24px;
       background: #00ffff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       color: #000;
       font-weight: bold;
       cursor: pointer;
+      transition: background 0.2s ease;
     }
 
-    .upgrader {
-      grid-column: span 3;
-      margin-top: 20px;
-      background: #20242d;
+    #make-contract:hover, .upgrader button:hover, .promo button:hover {
+      background: #00dddd;
     }
 
-    .upgrader input {
+    .upgrader input, .promo input {
       padding: 10px;
       margin-right: 10px;
-    }
-
-    .upgrader button {
-      padding: 10px 20px;
-      background: #00ffff;
-      border: none;
       border-radius: 6px;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
+      border: none;
     }
 
-    .promo {
-      grid-column: span 3;
-      background: #191c22;
-      margin-top: 20px;
-      padding: 20px;
+    #drop-animation {
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      border: 2px solid #00ffff;
       border-radius: 10px;
+      margin-top: 20px;
+      height: 100px;
+      position: relative;
     }
 
-    .promo input {
-      padding: 10px;
+    #drop-strip {
+      display: flex;
+      width: 10000px;
+      animation: scroll 3s linear forwards;
+    }
+
+    .drop-item {
+      width: 100px;
+      height: 100px;
+      background: #1a1a1a;
       margin-right: 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #fff;
+      border: 2px solid transparent;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-1000px); }
     }
   </style>
 </head>
@@ -141,12 +158,13 @@
     <div class="balance">Баланс: <span id="balance">1000</span>$</div>
   </header>
 
-  <main class="main">
+  <main>
     <section class="case-list">
-      <h2>Кейсы</h2>
+      <h2>Выбор кейса</h2>
       <button onclick="openCase('Desert Case', 100)">Desert Case – $100</button>
       <button onclick="openCase('Night Storm', 200)">Night Storm – $200</button>
       <button onclick="openCase('Ultra Rare', 500)">Ultra Rare – $500</button>
+      <div id="drop-animation"><div id="drop-strip"></div></div>
     </section>
 
     <section class="inventory">
@@ -156,14 +174,14 @@
 
     <section class="contracts">
       <h2>Контракты</h2>
-      <p>Выберите 3–10 предметов для обмена</p>
+      <p>Выберите 3–10 предметов</p>
       <ul id="contract-list"></ul>
       <button id="make-contract" disabled>Создать контракт</button>
     </section>
 
     <section class="upgrader">
       <h2>Апгрейд</h2>
-      <input type="number" id="upgrade-id" placeholder="ID предмета из инвентаря">
+      <input type="number" id="upgrade-id" placeholder="ID предмета">
       <input type="number" id="target-price" placeholder="Цена цели ($)">
       <button onclick="tryUpgrade()">Апгрейд</button>
     </section>
@@ -214,16 +232,29 @@
         alert("Недостаточно средств!");
         return;
       }
-      balance -= casePrice;
-      const drop = getRandomSkin();
-      inventory.push(drop);
-      alert(`Открыл ${caseName} и получил: ${drop.name} – $${drop.price}`);
-      updateBalance();
-      updateInventory();
-      updateContractList();
+
+      const strip = document.getElementById('drop-strip');
+      strip.innerHTML = '';
+
+      for (let i = 0; i < 30; i++) {
+        const skin = getRandomSkin();
+        const el = document.createElement('div');
+        el.className = 'drop-item';
+        el.textContent = skin.name;
+        strip.appendChild(el);
+      }
+
+      setTimeout(() => {
+        const drop = getRandomSkin();
+        inventory.push(drop);
+        balance -= casePrice;
+        alert(`Ты получил: ${drop.name} – $${drop.price}`);
+        updateBalance();
+        updateInventory();
+        updateContractList();
+      }, 3000);
     }
 
-    // Контракты
     const contractList = document.getElementById('contract-list');
     const makeContractBtn = document.getElementById('make-contract');
     let selectedForContract = [];
@@ -269,7 +300,6 @@
       alert(`Ты получил: ${newItemName}`);
     });
 
-    // Апгрейд
     function tryUpgrade() {
       const id = parseInt(document.getElementById('upgrade-id').value);
       const target = parseInt(document.getElementById('target-price').value);
@@ -291,7 +321,6 @@
       updateContractList();
     }
 
-    // Промокод
     function redeemPromo() {
       if (usedPromo) return alert("Промокод уже активирован!");
       const code = document.getElementById('promo-code').value.trim().toLowerCase();
