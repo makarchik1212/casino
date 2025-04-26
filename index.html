@@ -1,55 +1,293 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropnado — Онлайн открытие кейсов</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dropnado — Открытие кейсов</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f1115;
+      color: #fff;
+    }
+    .header {
+      background: #1a1d23;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .logo {
+      font-size: 28px;
+      color: #00ffff;
+      font-weight: bold;
+    }
+    .balance {
+      font-size: 18px;
+      color: #00ff90;
+    }
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      padding: 30px;
+      gap: 20px;
+    }
+    .cases h2,
+    .inventory h2 {
+      margin-bottom: 15px;
+      color: #00ffff;
+    }
+    .case-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .case {
+      background: #1c1f25;
+      border: 2px solid #00ffff55;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+    }
+    .case:hover {
+      background: #00ffff11;
+      transform: scale(1.02);
+    }
+    .case img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .opening {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .roller {
+      width: 100%;
+      height: 120px;
+      background: #14161c;
+      border: 3px solid #00ffff55;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .strip {
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      animation: spin 4s ease-out forwards;
+    }
+    .item {
+      width: 100px;
+      height: 100%;
+      margin: 0 5px;
+      background: #1a1d23;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #00ffff55;
+      border-radius: 6px;
+    }
+    #open-btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    #open-btn:disabled {
+      background-color: #444;
+      color: #999;
+      cursor: not-allowed;
+    }
+    #open-btn:hover:enabled {
+      background-color: #00dddd;
+    }
+    .inventory ul {
+      list-style: none;
+    }
+    .inventory li {
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #1c1f25;
+      border-left: 4px solid #00ff90;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .inventory button {
+      padding: 5px 10px;
+      background: #ff0044;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .inventory button:hover {
+      background: #dd0033;
+    }
+    @keyframes spin {
+      0% { left: 0; }
+      100% { left: -1500px; }
+    }
+  </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">🎯 Dropnado</div>
-        <div class="balance">Баланс: <span id="balance">$1000</span></div>
-    </header>
+  <header class="header">
+    <div class="logo">🎯 Dropnado</div>
+    <div class="balance">Баланс: <span id="balance">$1000</span></div>
+  </header>
 
-    <main class="main">
+  <main class="main">
 
-        <section class="cases">
-            <h2>Выберите кейс</h2>
-            <div class="case-list">
-                <div class="case" data-case="knife">
-                    <img src="images/knife_case.png" alt="Knife Case">
-                    <p>Knife Case<br>$300</p>
-                </div>
-                <div class="case" data-case="covert">
-                    <img src="images/covert_case.png" alt="Covert Case">
-                    <p>Covert Case<br>$50</p>
-                </div>
-                <div class="case" data-case="prisma">
-                    <img src="images/prisma_case.png" alt="Prisma Case">
-                    <p>Prisma Case<br>$20</p>
-                </div>
-            </div>
-        </section>
+    <section class="cases">
+      <h2>Выберите кейс</h2>
+      <div class="case-list">
+        <div class="case" data-case="knife">
+          <img src="https://cdn.cloudflare.steamstatic.com/apps/730/icons/econ/stickers/community04/eggnog.23cd9b2fc9e0cf5f24d782e8fc6fd5f74c43e10d.png" alt="Knife Case">
+          <p>Knife Case<br>$300</p>
+        </div>
+        <div class="case" data-case="covert">
+          <img src="https://wiki.cs.money/images/cases/spectrum2_case.png" alt="Covert Case">
+          <p>Covert Case<br>$50</p>
+        </div>
+        <div class="case" data-case="prisma">
+          <img src="https://wiki.cs.money/images/cases/prisma_case.png" alt="Prisma Case">
+          <p>Prisma Case<br>$20</p>
+        </div>
+      </div>
+    </section>
 
-        <section class="opening">
-            <div class="roller" id="roller">
-                <!-- Предметы будут здесь двигаться -->
-            </div>
-            <button id="open-btn" disabled>Открыть кейс</button>
-        </section>
+    <section class="opening">
+      <div class="roller" id="roller">
+        <!-- Прокрутка -->
+      </div>
+      <button id="open-btn" disabled>Открыть кейс</button>
+    </section>
 
-        <section class="inventory">
-            <h2>Инвентарь</h2>
-            <ul id="inventory-list">
-                <!-- Предметы из инвентаря -->
-            </ul>
-        </section>
+    <section class="inventory">
+      <h2>Инвентарь</h2>
+      <ul id="inventory-list">
+        <!-- Инвентарь -->
+      </ul>
+    </section>
 
-    </main>
+  </main>
 
-    <script src="script.js"></script>
+  <script>
+    const cases = {
+      knife: {
+        price: 300,
+        items: ["★ Karambit | Fade", "★ Bayonet | Slaughter", "★ M9 Bayonet | Tiger Tooth"]
+      },
+      covert: {
+        price: 50,
+        items: ["AK-47 | Fire Serpent", "AWP | Asiimov", "Desert Eagle | Blaze"]
+      },
+      prisma: {
+        price: 20,
+        items: ["MAC-10 | Neon Rider", "P250 | See Ya Later", "MP9 | Starlight Protector"]
+      }
+    };
 
+    let selectedCase = null;
+    let balance = 1000;
+    let inventory = [];
+
+    document.querySelectorAll('.case').forEach(caseEl => {
+      caseEl.addEventListener('click', () => {
+        selectedCase = caseEl.dataset.case;
+        document.getElementById('open-btn').disabled = false;
+      });
+    });
+
+    document.getElementById('open-btn').addEventListener('click', () => {
+      if (!selectedCase) return;
+
+      const caseData = cases[selectedCase];
+      if (balance < caseData.price) {
+        alert("Недостаточно средств!");
+        return;
+      }
+
+      balance -= caseData.price;
+      updateBalance();
+
+      const roller = document.getElementById('roller');
+      roller.innerHTML = '';
+
+      const strip = document.createElement('div');
+      strip.className = 'strip';
+
+      const pool = [];
+      for (let i = 0; i < 50; i++) {
+        const item = getRandomItem(caseData.items);
+        pool.push(item);
+      }
+
+      pool.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.textContent = name;
+        strip.appendChild(div);
+      });
+
+      roller.appendChild(strip);
+
+      strip.style.left = '0px';
+      strip.style.animation = 'spin 4s ease-out forwards';
+
+      setTimeout(() => {
+        const wonItem = pool[25]; // центральный
+        alert(`Выпало: ${wonItem}`);
+        inventory.push({ name: wonItem, price: getRandomPrice(caseData.price) });
+        updateInventory();
+      }, 4000);
+    });
+
+    function updateBalance() {
+      document.getElementById('balance').textContent = `$${balance}`;
+    }
+
+    function updateInventory() {
+      const invList = document.getElementById('inventory-list');
+      invList.innerHTML = '';
+
+      inventory.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item.name} — <b>$${item.price}</b>
+            <button onclick="sellItem(${index})">Продать</button>`;
+        invList.appendChild(li);
+      });
+    }
+
+    function sellItem(index) {
+      balance += inventory[index].price;
+      inventory.splice(index, 1);
+      updateBalance();
+      updateInventory();
+    }
+
+    function getRandomItem(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    function getRandomPrice(base) {
+      return Math.floor(base * (0.8 + Math.random() * 1.2));
+    }
+  </script>
 </body>
 </html>
