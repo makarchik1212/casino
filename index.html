@@ -2,183 +2,176 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Dropnado — Открытие кейсов CS:GO</title>
+  <title>Dropnado — Case Battle Clone</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #66fcf1;
-      --bg: #0b0c10;
-      --card: #1f2833;
-      --accent: #45a29e;
-      --danger: #c3073f;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
+      margin: 0;
       font-family: 'Orbitron', sans-serif;
-      background: var(--bg);
-      color: white;
+      background: #111;
+      color: #fff;
     }
     header {
-      background: var(--card);
+      background: #1b1b1b;
       padding: 20px;
       text-align: center;
       font-size: 2rem;
-      color: var(--primary);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      color: #00e0ff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .container {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .case-list {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-    .case-card {
-      flex: 1;
-      background: var(--card);
-      border-radius: 12px;
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
       padding: 20px;
-      text-align: center;
+      gap: 20px;
+    }
+    .case-selector, .inventory, .battle-panel {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px #00e0ff55;
+    }
+    .case-button {
+      background: #2a2a2a;
+      border: 2px solid #00e0ff;
+      color: #00e0ff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
       cursor: pointer;
+      width: 100%;
+      text-align: center;
       transition: 0.3s;
-      border: 2px solid transparent;
     }
-    .case-card:hover {
-      border-color: var(--primary);
-      transform: scale(1.05);
-    }
-    .case-card h3 {
-      color: var(--accent);
+    .case-button:hover {
+      background: #00e0ff22;
     }
     .roller {
+      margin-top: 20px;
       height: 120px;
-      background: var(--card);
-      border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--accent);
-      margin-bottom: 40px;
+      background: #121212;
+      border: 2px solid #00e0ff;
+      border-radius: 10px;
       position: relative;
     }
     .strip {
       display: flex;
       position: absolute;
-      height: 100%;
       animation: roll 4s ease-out forwards;
     }
     .item {
-      width: 120px;
+      width: 100px;
       height: 100%;
+      background: #1a1a1a;
+      color: white;
+      border: 1px solid #00e0ff;
       display: flex;
-      align-items: center;
       justify-content: center;
-      background: var(--bg);
+      align-items: center;
       margin: 0 5px;
-      border-radius: 6px;
-      border: 1px solid var(--accent);
+      border-radius: 5px;
     }
     @keyframes roll {
       0% { left: 0; }
-      100% { left: -75%; }
+      100% { left: -1500px; }
     }
-    .inventory {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .inventory h2 {
-      color: var(--primary);
-      margin-bottom: 20px;
+    .inventory h3, .battle-panel h3 {
+      margin-bottom: 10px;
+      color: #00e0ff;
     }
     .inv-item {
       display: flex;
       justify-content: space-between;
-      padding: 10px;
-      border-bottom: 1px solid var(--accent);
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
     }
     .sell-btn {
-      background: var(--danger);
+      background: #ff0033;
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 5px;
       cursor: pointer;
+    }
+    .balance {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #0f0;
     }
   </style>
 </head>
 <body>
-  <header>🎯 Dropnado — Открытие кейсов CS:GO</header>
-  <div class="container">
-    <div class="case-list">
-      <div class="case-card" onclick="openCase('covert')">
-        <h3>🔥 Covert Case</h3>
-        <p>Лучшие скины!</p>
-      </div>
-      <div class="case-card" onclick="openCase('firestorm')">
-        <h3>💥 Firestorm</h3>
-        <p>Огненные призы</p>
-      </div>
-      <div class="case-card" onclick="openCase('knife')">
-        <h3>🔪 Knife Case</h3>
-        <p>Шанс на нож</p>
-      </div>
+  <header>Dropnado — Онлайн открытие кейсов</header>
+  <div class="main">
+    <div class="case-selector">
+      <h3>Выбор кейса</h3>
+      <div class="case-button" onclick="openCase('knife')">🔪 Knife Case</div>
+      <div class="case-button" onclick="openCase('covert')">🔥 Covert Case</div>
+      <div class="case-button" onclick="openCase('fire')">💥 Firestorm Case</div>
     </div>
 
-    <div class="roller" id="roller"></div>
+    <div>
+      <div class="roller" id="roller"></div>
+      <div class="balance">Баланс: $<span id="balance">1000</span></div>
+    </div>
 
     <div class="inventory">
-      <h2>🎒 Ваш инвентарь</h2>
+      <h3>🎒 Инвентарь</h3>
       <div id="inventory"></div>
     </div>
   </div>
 
   <script>
     const drops = {
-      covert: [
-        { name: 'AK-47 | Redline', price: 3.5 },
-        { name: 'M4A1-S | Decimator', price: 5.2 },
-        { name: 'AWP | Asiimov', price: 12.9 }
-      ],
-      firestorm: [
-        { name: 'AWP | Wildfire', price: 18.3 },
-        { name: 'Desert Eagle | Blaze', price: 25 },
-        { name: 'AK-47 | Fire Serpent', price: 60 }
-      ],
       knife: [
-        { name: 'Karambit | Fade', price: 350 },
-        { name: 'Butterfly Knife | Tiger Tooth', price: 290 },
-        { name: 'Bayonet | Marble Fade', price: 320 }
+        { name: 'Karambit | Fade', price: 320 },
+        { name: 'Butterfly | Slaughter', price: 290 },
+        { name: 'Bayonet | Marble Fade', price: 300 }
+      ],
+      covert: [
+        { name: 'M4A1-S | Decimator', price: 5 },
+        { name: 'AK-47 | Vulcan', price: 15 },
+        { name: 'AWP | Asiimov', price: 28 }
+      ],
+      fire: [
+        { name: 'Desert Eagle | Blaze', price: 20 },
+        { name: 'AK-47 | Fire Serpent', price: 50 },
+        { name: 'AWP | Wildfire', price: 18 }
       ]
     };
+
     let inventory = [];
+    let balance = 1000;
+
+    function updateBalance() {
+      document.getElementById('balance').innerText = balance.toFixed(2);
+    }
 
     function openCase(type) {
       const roller = document.getElementById('roller');
       roller.innerHTML = '';
+
       const strip = document.createElement('div');
       strip.className = 'strip';
-      const items = drops[type];
-      let won = items[Math.floor(Math.random() * items.length)];
 
-      for (let i = 0; i < 30; i++) {
+      const items = drops[type];
+      let result = items[Math.floor(Math.random() * items.length)];
+
+      for (let i = 0; i < 50; i++) {
+        let fake = items[Math.floor(Math.random() * items.length)];
         const item = document.createElement('div');
         item.className = 'item';
-        const random = items[Math.floor(Math.random() * items.length)];
-        item.textContent = random.name;
+        item.textContent = fake.name;
         strip.appendChild(item);
       }
 
       roller.appendChild(strip);
       setTimeout(() => {
-        alert(`🎉 Вы выиграли: ${won.name} ($${won.price})`);
-        inventory.push(won);
+        alert(`Вы выиграли: ${result.name} ($${result.price})`);
+        inventory.push(result);
         updateInventory();
       }, 4000);
     }
@@ -187,22 +180,26 @@
       const container = document.getElementById('inventory');
       container.innerHTML = '';
       inventory.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'inv-item';
-        row.innerHTML = `
-          <span>${item.name} — $${item.price}</span>
+        const div = document.createElement('div');
+        div.className = 'inv-item';
+        div.innerHTML = `
+          <span>${item.name} - $${item.price}</span>
           <button class="sell-btn" onclick="sellItem(${index})">Продать</button>
         `;
-        container.appendChild(row);
+        container.appendChild(div);
       });
     }
 
     function sellItem(index) {
-      alert(`Вы продали ${inventory[index].name} за $${inventory[index].price}`);
+      balance += inventory[index].price;
       inventory.splice(index, 1);
       updateInventory();
+      updateBalance();
     }
+
+    updateBalance();
   </script>
 </body>
 </html>
+
 
