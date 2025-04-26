@@ -1,202 +1,261 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dropnado - Case Opening</title>
+  <meta charset="UTF-8">
+  <title>Dropnado</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;
-    }
     body {
-      background: #0e0e0e;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f0f0f;
       color: white;
     }
     header {
+      background-color: #f44357;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      background: #1a1a1a;
-      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+      padding: 15px 50px;
     }
-    header h1 { color: #00ccff; }
-    .btn {
-      background: #00ccff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      color: black;
-      cursor: pointer;
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      color: #ccc;
+    }
+    .balance {
+      background-color: #0b5;
+      padding: 8px 15px;
+      border-radius: 20px;
       font-weight: bold;
     }
-    main {
-      padding: 30px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+    .hero {
+      background: linear-gradient(to right, #2a2aa5, #3912ad);
+      padding: 40px;
+      text-align: center;
     }
-    .case-box, .inventory, .chat, .profile {
-      background: #1a1a1a;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    .hero h1 {
+      font-size: 48px;
+      margin: 0;
     }
-    .case-box button {
+    .hero p {
+      font-size: 18px;
       margin-top: 10px;
     }
-    .scroll {
+    .btns {
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-open {
+      background-color: #f44357;
+      color: white;
+    }
+    .btn-upgrade {
+      background-color: #111;
+      color: white;
+    }
+    .cases {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 40px;
+    }
+    .case {
+      background-color: #f44357;
+      margin: 15px;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+      padding: 20px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .case:hover {
+      transform: translateY(-5px);
+    }
+    .case img {
+      width: 80%;
+      margin-bottom: 10px;
+    }
+    .case h3 {
+      margin: 10px 0 5px;
+    }
+    .case p {
+      font-size: 14px;
+      color: #eee;
+    }
+    .price {
+      margin-top: 5px;
+      color: #0b5;
+      font-weight: bold;
+    }
+    /* Модалка */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .modal-content {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .item-strip {
       display: flex;
       overflow-x: hidden;
-      margin-top: 10px;
-      border: 2px solid #444;
-      padding: 10px;
-      position: relative;
-    }
-    .scroll-track {
-      display: flex;
-      animation: scrollItems 5s linear forwards;
-    }
-    .scroll img {
-      height: 80px;
-      margin-right: 10px;
-      border-radius: 8px;
-    }
-    @keyframes scrollItems {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-70%); }
+      margin-top: 20px;
     }
     .item {
-      background: #333;
-      margin: 5px 0;
-      padding: 10px;
+      background-color: #f44357;
       border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .chat-box {
-      height: 200px;
-      overflow-y: scroll;
-      background: #0e0e0e;
       padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-    }
-    .chat-msg { margin-bottom: 5px; }
-    footer {
-      margin-top: 30px;
+      margin: 0 10px;
+      flex: 0 0 auto;
+      width: 120px;
       text-align: center;
-      color: #555;
+    }
+    .item img {
+      width: 100%;
+      border-radius: 5px;
+    }
+    .close-btn {
+      margin-top: 20px;
+      background: #f44357;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Dropnado</h1>
-    <button class="btn" onclick="alert('Фейковая авторизация через Steam')">Войти через Steam</button>
-  </header>
 
-  <main>
-    <section class="case-box">
-      <h2>Открыть кейс</h2>
-      <div class="scroll">
-        <div class="scroll-track" id="scroll-track">
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776425" alt="AK-47 | Neon Rider" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776432" alt="AWP | Asiimov" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776446" alt="M4A4 | Howl" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776430" alt="Desert Eagle | Blaze" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776453" alt="Karambit | Fade" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776425" alt="AK-47 | Neon Rider" />
-          <img src="https://community.akamai.steamstatic.com/economy/image/class/730/310776432" alt="AWP | Asiimov" />
-        </div>
-      </div>
-      <button class="btn" onclick="startSpin()">Открыть</button>
-    </section>
+<header>
+  <div class="logo">Dropnado</div>
+  <nav>
+    <a href="#">Cases</a>
+    <a href="#">Upgrades</a>
+    <a href="#">Inventory</a>
+    <a href="#">History</a>
+  </nav>
+  <div class="balance">$997.51</div>
+</header>
 
-    <section class="inventory">
-      <h2>Инвентарь</h2>
-      <div id="inventory-list"></div>
-    </section>
+<section class="hero">
+  <h1>CS:GO Cases</h1>
+  <p>Open CS:GO weapon cases and get rare skins!</p>
+  <div class="btns">
+    <button class="btn btn-open" onclick="openCase()">🎒 Open Cases</button>
+    <button class="btn btn-upgrade">⬆️ Upgrade Items</button>
+  </div>
+</section>
 
-    <section class="chat">
-      <h2>Онлайн-чат</h2>
-      <div class="chat-box">
-        <div class="chat-msg"><b>Admin:</b> Добро пожаловать на Dropnado!</div>
-        <div class="chat-msg"><b>User123:</b> Выпал нож 😍</div>
-        <div class="chat-msg"><b>DropKing:</b> Кто идёт в battle-кейс?</div>
-      </div>
-      <input type="text" placeholder="Написать сообщение..." style="width: 100%; padding: 10px; border-radius: 10px; border: none;" />
-    </section>
+<section class="cases">
+  <div class="case" onclick="openCase()">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/Phoenix_Case.png/220px-Phoenix_Case.png" alt="Case">
+    <h3>CS:GO Weapon Case</h3>
+    <p>Contains community-designed skins</p>
+    <div class="price">$2.49</div>
+  </div>
 
-    <section class="profile">
-      <h2>Профиль</h2>
-      <p>Уровень: <strong>7</strong></p>
-      <p>Опыт: <progress value="70" max="100"></progress></p>
-      <p>VIP статус: <strong style="color: gold">Активен</strong></p>
-      <button class="btn" onclick="alert('Battle-кейс запущен!')">Создать Battle-кейс</button>
-    </section>
-  </main>
+  <div class="case" onclick="openCase()">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/Phoenix_Case.png/220px-Phoenix_Case.png" alt="Case">
+    <h3>CS:GO Weapon Case 2</h3>
+    <p>More community-designed skins</p>
+    <div class="price">$2.99</div>
+  </div>
 
-  <footer>
-    &copy; 2025 Dropnado. Все права защищены.
-  </footer>
+  <div class="case" onclick="openCase()">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/Phoenix_Case.png/220px-Phoenix_Case.png" alt="Case">
+    <h3>CS:GO Weapon Case 3</h3>
+    <p>Even more skins</p>
+    <div class="price">$2.99</div>
+  </div>
+</section>
 
-  <audio id="case-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4ae2fa62f2.mp3" preload="auto"></audio>
+<!-- Модальное окно открытия кейса -->
+<div class="modal" id="caseModal">
+  <div class="modal-content">
+    <h2>Opening Case...</h2>
+    <div class="item-strip" id="itemStrip">
+      <!-- Сюда вставляются предметы -->
+    </div>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
 
-  <script>
-    const items = [
-      'AK-47 | Neon Rider',
-      'AWP | Asiimov',
-      'M4A4 | Howl',
-      'Desert Eagle | Blaze',
-      'Karambit | Fade'
-    ];
+<script>
+  const items = [
+    { name: "Asimov", img: "https://via.placeholder.com/100x100?text=Asimov" },
+    { name: "Fire Serpent", img: "https://via.placeholder.com/100x100?text=Fire+Serpent" },
+    { name: "Howl", img: "https://via.placeholder.com/100x100?text=Howl" },
+    { name: "Fade", img: "https://via.placeholder.com/100x100?text=Fade" },
+    { name: "Vulcan", img: "https://via.placeholder.com/100x100?text=Vulcan" },
+    { name: "Dragon Lore", img: "https://via.placeholder.com/100x100?text=Dragon+Lore" },
+    { name: "Hyper Beast", img: "https://via.placeholder.com/100x100?text=Hyper+Beast" },
+    { name: "Doppler", img: "https://via.placeholder.com/100x100?text=Doppler" }
+  ];
 
-    function startSpin() {
-      const track = document.getElementById('scroll-track');
-      track.style.animation = 'none';
-      void track.offsetWidth;
-      track.style.animation = 'scrollItems 5s linear forwards';
-      document.getElementById('case-sound').play();
+  function openCase() {
+    const modal = document.getElementById('caseModal');
+    const strip = document.getElementById('itemStrip');
+    strip.innerHTML = '';
 
-      const randomIndex = Math.floor(Math.random() * items.length);
-      const reward = items[randomIndex];
-
-      setTimeout(() => {
-        alert('Выпал предмет: ' + reward);
-        addToInventory(reward);
-      }, 5000);
-    }
-
-    function addToInventory(itemName) {
-      const list = document.getElementById('inventory-list');
+    // Генерация полосы скинов
+    for (let i = 0; i < 30; i++) {
+      const item = items[Math.floor(Math.random() * items.length)];
       const div = document.createElement('div');
       div.className = 'item';
-      div.innerHTML = `${itemName} <button class="btn" onclick="removeItem(this, '${itemName}')">Продать</button>`;
-      list.appendChild(div);
-      saveInventory();
+      div.innerHTML = `<img src="${item.img}" alt="${item.name}"><p>${item.name}</p>`;
+      strip.appendChild(div);
     }
 
-    function removeItem(button, itemName) {
-      button.parentElement.remove();
-      const inventory = getInventory();
-      const index = inventory.indexOf(itemName);
-      if (index > -1) inventory.splice(index, 1);
-      localStorage.setItem('inventory', JSON.stringify(inventory));
-    }
+    modal.style.display = 'flex';
 
-    function saveInventory() {
-      const items = Array.from(document.querySelectorAll('#inventory-list .item')).map(i => i.textContent.replace('Продать','').trim());
-      localStorage.setItem('inventory', JSON.stringify(items));
-    }
+    // Анимация прокрутки
+    strip.style.transition = 'transform 3s ease';
+    setTimeout(() => {
+      strip.style.transform = 'translateX(-1200px)';
+    }, 100);
+  }
 
-    function loadInventory() {
-      const saved = JSON.parse(localStorage.getItem('inventory')) || [];
-      saved.forEach(item => addToInventory(item));
-    }
+  function closeModal() {
+    const modal = document.getElementById('caseModal');
+    modal.style.display = 'none';
+    const strip = document.getElementById('itemStrip');
+    strip.style.transition = 'none';
+    strip.style.transform = 'translateX(0)';
+  }
+</script>
 
-    window.onload = loadInventory;
-  </script>
 </body>
 </html>
