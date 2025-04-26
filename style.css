@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropnado — Онлайн открытие кейсов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">🎯 Dropnado</div>
+        <div class="balance">Баланс: <span id="balance">$1000</span></div>
+    </header>
+
+    <main class="main">
+
+        <section class="cases">
+            <h2>Выберите кейс</h2>
+            <div class="case-list">
+                <div class="case" data-case="knife">
+                    <img src="images/knife_case.png" alt="Knife Case">
+                    <p>Knife Case<br>$300</p>
+                </div>
+                <div class="case" data-case="covert">
+                    <img src="images/covert_case.png" alt="Covert Case">
+                    <p>Covert Case<br>$50</p>
+                </div>
+                <div class="case" data-case="prisma">
+                    <img src="images/prisma_case.png" alt="Prisma Case">
+                    <p>Prisma Case<br>$20</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="opening">
+            <div class="roller" id="roller">
+                <!-- Предметы будут здесь двигаться -->
+            </div>
+            <button id="open-btn" disabled>Открыть кейс</button>
+        </section>
+
+        <section class="inventory">
+            <h2>Инвентарь</h2>
+            <ul id="inventory-list">
+                <!-- Предметы из инвентаря -->
+            </ul>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
 
