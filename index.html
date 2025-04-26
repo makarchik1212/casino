@@ -2,227 +2,148 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>🎮 Dropnado — Кейсы CS:GO</title>
+  <title>Dropnado — Открытие кейсов CS:GO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      background: radial-gradient(circle at center, #1e1e1e, #0f0f0f);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
+      padding: 0;
+      background: #0b0c10;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: start;
-      min-height: 100vh;
+    }
+
+    header {
+      background-color: #1f2833;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      font-size: 2rem;
+      color: #66fcf1;
+    }
+
+    .container {
+      max-width: 1200px;
       padding: 20px;
     }
 
-    h1 {
-      font-size: 3rem;
-      margin: 20px 0;
-      text-shadow: 0 0 15px #00bcd4;
-      color: #00eaff;
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
     }
 
-    .logo {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #00eaff;
-    }
-
-    .case-container {
-      width: 100%;
-      max-width: 720px;
-      overflow: hidden;
-      border: 4px solid #00eaff;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      position: relative;
-    }
-
-    .roller {
-      display: flex;
-      transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    .item {
-      flex: 0 0 100px;
-      margin: 10px;
+    .case {
+      background-color: #1f2833;
+      padding: 20px;
+      border-radius: 10px;
       text-align: center;
-      border-radius: 10px;
-      padding: 10px;
-      background: #1a1a1a;
-      border: 2px solid #333;
-      font-weight: bold;
-      color: white;
-    }
-
-    .item.common { border-color: gray; }
-    .item.rare { border-color: dodgerblue; }
-    .item.epic { border-color: violet; }
-    .item.legendary { border-color: gold; }
-
-    .center-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 4px;
-      background: red;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-
-    button {
-      margin: 20px 10px;
-      padding: 12px 24px;
-      background: #00eaff;
-      border: none;
-      color: #111;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border-radius: 10px;
       cursor: pointer;
+      transition: 0.3s;
     }
 
-    .result {
-      margin-top: 20px;
-      font-size: 1.5rem;
-      text-shadow: 0 0 10px black;
+    .case:hover {
+      background-color: #45a29e;
     }
 
     .inventory {
       margin-top: 40px;
-      background: #111;
-      padding: 20px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 720px;
     }
 
     .inventory h2 {
       margin-bottom: 15px;
-      color: #00eaff;
+      color: #66fcf1;
     }
 
     .inv-item {
+      background: #1f2833;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px;
-      border-bottom: 1px solid #333;
-    }
-
-    .inv-item span {
-      font-weight: bold;
     }
 
     .sell-btn {
-      padding: 4px 10px;
-      background: crimson;
-      color: white;
+      background: #c3073f;
       border: none;
-      border-radius: 6px;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="logo">💥 Dropnado</div>
-  <h1>Открытие кейсов CS:GO</h1>
+  <header>💥 Dropnado — CS:GO Кейс Баттл</header>
+  <div class="container">
+    <h2>Выберите кейс для открытия</h2>
+    <div class="case-grid">
+      <div class="case" onclick="openCase('covert')">🔥 Covert Case</div>
+      <div class="case" onclick="openCase('firestorm')">💥 Firestorm Case</div>
+      <div class="case" onclick="openCase('knife')">🔪 Knife Case</div>
+    </div>
 
-  <div class="case-container">
-    <div class="center-line"></div>
-    <div class="roller" id="roller"></div>
-  </div>
-
-  <button id="openBtn">Открыть кейс</button>
-  <div class="result" id="result"></div>
-
-  <div class="inventory">
-    <h2>🎒 Инвентарь</h2>
-    <div id="inventoryList"></div>
+    <div class="inventory">
+      <h2>🎒 Инвентарь</h2>
+      <div id="inventoryList"></div>
+    </div>
   </div>
 
   <script>
-    const items = [
-      { name: '🔫 P250 | Sand Dune', class: 'common', chance: 50, price: 0.1 },
-      { name: '🧤 Перчатки | Sport', class: 'rare', chance: 25, price: 1.2 },
-      { name: '🔪 Нож | Karambit', class: 'epic', chance: 15, price: 8 },
-      { name: '🔥 AWP | Dragon Lore', class: 'legendary', chance: 10, price: 50 }
-    ];
+    const drops = {
+      covert: [
+        { name: 'AK-47 | Redline', price: 3.5 },
+        { name: 'M4A1-S | Decimator', price: 5.2 },
+        { name: 'AWP | Asiimov', price: 12.9 }
+      ],
+      firestorm: [
+        { name: 'AWP | Wildfire', price: 18.3 },
+        { name: 'Desert Eagle | Blaze', price: 25 },
+        { name: 'AK-47 | Fire Serpent', price: 60 }
+      ],
+      knife: [
+        { name: 'Karambit | Fade', price: 350 },
+        { name: 'Butterfly Knife | Tiger Tooth', price: 290 },
+        { name: 'Bayonet | Marble Fade', price: 320 }
+      ]
+    };
 
-    let inventory = [];
+    const inventory = [];
 
-    const roller = document.getElementById('roller');
-    const btn = document.getElementById('openBtn');
-    const resultDiv = document.getElementById('result');
-    const inventoryList = document.getElementById('inventoryList');
-
-    function getRandomItem() {
-      const rand = Math.random() * 100;
-      let sum = 0;
-      for (let item of items) {
-        sum += item.chance;
-        if (rand <= sum) return item;
-      }
-    }
-
-    function fillRoller(targetItem) {
-      roller.innerHTML = '';
-      const fullList = [];
-
-      for (let i = 0; i < 20; i++) {
-        const random = items[Math.floor(Math.random() * items.length)];
-        fullList.push(random);
-      }
-
-      fullList.push(targetItem);
-
-      fullList.forEach(item => {
-        const div = document.createElement('div');
-        div.className = `item ${item.class}`;
-        div.innerText = item.name;
-        roller.appendChild(div);
-      });
-
-      return fullList.length;
+    function openCase(type) {
+      const caseItems = drops[type];
+      const drop = caseItems[Math.floor(Math.random() * caseItems.length)];
+      inventory.push(drop);
+      alert(`🎉 Вы получили: ${drop.name} ($${drop.price})`);
+      updateInventory();
     }
 
     function updateInventory() {
-      inventoryList.innerHTML = '';
-      inventory.forEach((item, index) => {
+      const list = document.getElementById('inventoryList');
+      list.innerHTML = '';
+      inventory.forEach((item, i) => {
         const row = document.createElement('div');
         row.className = 'inv-item';
-        row.innerHTML = `<span>${item.name} (${item.price.toFixed(2)}$)</span>
-                         <button class="sell-btn" onclick="sellItem(${index})">Продать</button>`;
-        inventoryList.appendChild(row);
+        row.innerHTML = `
+          <span>${item.name} — $${item.price}</span>
+          <button class="sell-btn" onclick="sellItem(${i})">Продать</button>
+        `;
+        list.appendChild(row);
       });
     }
 
     function sellItem(index) {
-      alert(`Вы продали ${inventory[index].name} за ${inventory[index].price.toFixed(2)}$`);
+      alert(`Вы продали ${inventory[index].name} за $${inventory[index].price}`);
       inventory.splice(index, 1);
       updateInventory();
     }
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      resultDiv.textContent = 'Кейс открывается...';
-
-      const winItem = getRandomItem();
-      const itemCount = fillRoller(winItem);
-      const scrollDistance = (itemCount - 6) * 120;
-      roller.style.transform = `translateX(-${scrollDistance}px)`;
-
-      setTimeout(() => {
-        resultDiv.innerHTML = `🎉 Выпало: <span style="color: ${winItem.class === 'legendary' ? 'gold' : winItem.class === 'epic' ? 'violet' : winItem.class === 'rare' ? 'dodgerblue' : 'gray'}">${winItem.name}</span>`;
-        inventory.push(winItem);
-        updateInventory();
-        btn.disabled = false;
-      }, 3200);
-    });
   </script>
 </body>
 </html>
