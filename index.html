@@ -2,34 +2,42 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>🎰 Казино Кейсы</title>
+  <title>🎮 Dropnado — Кейсы CS:GO</title>
   <style>
     body {
       margin: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background: radial-gradient(circle at center, #1e1e1e, #0f0f0f);
       font-family: 'Segoe UI', sans-serif;
       color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: start;
       min-height: 100vh;
-      overflow: hidden;
+      padding: 20px;
     }
 
     h1 {
       font-size: 3rem;
-      margin-bottom: 30px;
-      text-shadow: 0 0 10px gold;
+      margin: 20px 0;
+      text-shadow: 0 0 15px #00bcd4;
+      color: #00eaff;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #00eaff;
     }
 
     .case-container {
-      width: 90%;
-      max-width: 600px;
+      width: 100%;
+      max-width: 720px;
       overflow: hidden;
-      border: 4px solid gold;
+      border: 4px solid #00eaff;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.3);
       position: relative;
     }
 
@@ -51,7 +59,7 @@
     }
 
     .item.common { border-color: gray; }
-    .item.rare { border-color: skyblue; }
+    .item.rare { border-color: dodgerblue; }
     .item.epic { border-color: violet; }
     .item.legendary { border-color: gold; }
 
@@ -67,20 +75,15 @@
     }
 
     button {
-      margin-top: 30px;
-      padding: 15px 30px;
-      background: gold;
+      margin: 20px 10px;
+      padding: 12px 24px;
+      background: #00eaff;
       border: none;
       color: #111;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #ffd700;
     }
 
     .result {
@@ -88,33 +91,74 @@
       font-size: 1.5rem;
       text-shadow: 0 0 10px black;
     }
+
+    .inventory {
+      margin-top: 40px;
+      background: #111;
+      padding: 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .inventory h2 {
+      margin-bottom: 15px;
+      color: #00eaff;
+    }
+
+    .inv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    .inv-item span {
+      font-weight: bold;
+    }
+
+    .sell-btn {
+      padding: 4px 10px;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-
-  <h1>🎁 Казино: Открой свой кейс!</h1>
+  <div class="logo">💥 Dropnado</div>
+  <h1>Открытие кейсов CS:GO</h1>
 
   <div class="case-container">
     <div class="center-line"></div>
-    <div class="roller" id="roller">
-      <!-- Items will be inserted here dynamically -->
-    </div>
+    <div class="roller" id="roller"></div>
   </div>
 
   <button id="openBtn">Открыть кейс</button>
   <div class="result" id="result"></div>
 
+  <div class="inventory">
+    <h2>🎒 Инвентарь</h2>
+    <div id="inventoryList"></div>
+  </div>
+
   <script>
     const items = [
-      { name: '💵 10 монет', class: 'common', chance: 60 },
-      { name: '💎 50 кристаллов', class: 'rare', chance: 25 },
-      { name: '🎲 VIP карта', class: 'epic', chance: 10 },
-      { name: '👑 Золотой джекпот', class: 'legendary', chance: 5 }
+      { name: '🔫 P250 | Sand Dune', class: 'common', chance: 50, price: 0.1 },
+      { name: '🧤 Перчатки | Sport', class: 'rare', chance: 25, price: 1.2 },
+      { name: '🔪 Нож | Karambit', class: 'epic', chance: 15, price: 8 },
+      { name: '🔥 AWP | Dragon Lore', class: 'legendary', chance: 10, price: 50 }
     ];
+
+    let inventory = [];
 
     const roller = document.getElementById('roller');
     const btn = document.getElementById('openBtn');
     const resultDiv = document.getElementById('result');
+    const inventoryList = document.getElementById('inventoryList');
 
     function getRandomItem() {
       const rand = Math.random() * 100;
@@ -134,7 +178,7 @@
         fullList.push(random);
       }
 
-      fullList.push(targetItem); // финальный предмет
+      fullList.push(targetItem);
 
       fullList.forEach(item => {
         const div = document.createElement('div');
@@ -146,22 +190,39 @@
       return fullList.length;
     }
 
+    function updateInventory() {
+      inventoryList.innerHTML = '';
+      inventory.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'inv-item';
+        row.innerHTML = `<span>${item.name} (${item.price.toFixed(2)}$)</span>
+                         <button class="sell-btn" onclick="sellItem(${index})">Продать</button>`;
+        inventoryList.appendChild(row);
+      });
+    }
+
+    function sellItem(index) {
+      alert(`Вы продали ${inventory[index].name} за ${inventory[index].price.toFixed(2)}$`);
+      inventory.splice(index, 1);
+      updateInventory();
+    }
+
     btn.addEventListener('click', () => {
       btn.disabled = true;
       resultDiv.textContent = 'Кейс открывается...';
 
       const winItem = getRandomItem();
       const itemCount = fillRoller(winItem);
-
-      const scrollDistance = (itemCount - 6) * 120; // смещаем так, чтобы нужный был в центре
+      const scrollDistance = (itemCount - 6) * 120;
       roller.style.transform = `translateX(-${scrollDistance}px)`;
 
       setTimeout(() => {
-        resultDiv.innerHTML = `🎉 Вам выпало: <span style="color: ${winItem.class === 'legendary' ? 'gold' : winItem.class === 'epic' ? 'violet' : winItem.class === 'rare' ? 'skyblue' : 'gray'}">${winItem.name}</span>`;
+        resultDiv.innerHTML = `🎉 Выпало: <span style="color: ${winItem.class === 'legendary' ? 'gold' : winItem.class === 'epic' ? 'violet' : winItem.class === 'rare' ? 'dodgerblue' : 'gray'}">${winItem.name}</span>`;
+        inventory.push(winItem);
+        updateInventory();
         btn.disabled = false;
       }, 3200);
     });
   </script>
-
 </body>
 </html>
